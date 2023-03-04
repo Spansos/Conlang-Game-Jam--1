@@ -1,0 +1,31 @@
+The process of change from one form, state, style or place to another. 
+A word or phrase connecting one part of a discourse to another.
+(music) A brief modulation; a passage connecting two themes.
+(music) A change of key.
+(genetics) A point mutation in which one base is replaced by another of the same class (purine or pyrimidine); compare transversion.
+(some sports) A change from defense to attack, or attack to defense.
+(medicine) The onset of the final stage of childbirth.
+(education) Professional special education assistance for children or adults in the process of leaving one educational environment or support program for another to relatively more independent living.
+(skating) A change between forward and backward motion without stopping.
+(LGBT) The process or act of changing from one gender role to another, or of bringing one's outward appearance in line with one's internal gender identity. 
+(aviation) A published procedure for instrument flight, coming between the departure and en-route phases of flight, or between en-route flight and an approach/landing procedure.
+
+from latin transitio. from trans + itio, across/beyond + go/proceed + noun-making postfix
+
+crafting:
+    game jam (making jam from games)
+    just generic factorio or game creator game
+
+death:
+    platformer, when dead become ghost and world state changes for puzzles and challenge
+
+segway:
+    gmae about talking, requires you to segway between topics to progress
+
+(education):
+    game wherin the enire game is just preparing you for after the tutorial
+
+state changes:
+    control state of world (ex. press button to switch between a water-level and non-water-level counterpart)
+    control state of self
+    -have transition from one state to another be draw out and important gameplay-wise
