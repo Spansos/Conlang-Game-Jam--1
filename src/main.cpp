@@ -1,9 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Entity {
-};
-
 
 int main() {
   const int gameWidth = 800;
@@ -25,7 +22,7 @@ int main() {
         break;
       }
     }
-    window.clear(sf::Color(86, 100, 128));
+    window.clear(sf::Color(32, 42, 64));
     window.display();
   }
 

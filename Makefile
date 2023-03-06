@@ -10,4 +10,4 @@ obj/%.o: src/%.cpp
 	$(CC) $(CFLAGS) -c $^ -Iinclude -o $@
 
 bin/main: $(OBJFILES)
-	$(CC) $(CFLAGS) -static -o $@ $^ $(wildcard lib/*)
+	$(CC) $(CFLAGS) -o $@ $^ $(wildcard lib/*)

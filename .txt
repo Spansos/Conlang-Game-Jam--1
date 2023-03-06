@@ -14,18 +14,40 @@ from latin transitio. from trans + itio, across/beyond + go/proceed + noun-makin
 
 crafting:
     game jam (making jam from games)
-    just generic factorio or game creator game
+    -bad pun
+    just generic factorio or x-creator simulator game
+
+    -maybe too hard to have it be fun
+    -crafting is too broad a subject
+
 
 death:
     platformer, when dead become ghost and world state changes for puzzles and challenge
+    -both including death and world change is double, but death alone is too little
+
+    -don't personally connect death with transition
 
 segway:
     gmae about talking, requires you to segway between topics to progress
+    -requires writing, bad at
 
 (education):
     game wherin the enire game is just preparing you for after the tutorial
+    -requires writing, bad at
 
 state changes:
     control state of world (ex. press button to switch between a water-level and non-water-level counterpart)
     control state of self
+
     -have transition from one state to another be draw out and important gameplay-wise
+
+
+think i'll stick with state changes, specifically world state change, but player might be added later
+
+game name:
+    ante, toki pona for change, difference, etc
+    -maybe something less on the nose
+    ma (li?) ante, toki pona for changing location
+    -above comment, but more
+    maliante/maante, above ideas written as one word
+    -sounds good + has meaning but obfuscated
