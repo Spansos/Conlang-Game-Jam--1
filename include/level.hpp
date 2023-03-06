@@ -2,22 +2,32 @@
 
 // headers
 #include <Vector>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class Level {
     public:
         Level();
-        Level(std::vector<WorldState>);
-        std::vector<WorldState> &getStates();
-        // getState();
+        Level(std::vector<LevelState>);
+        std::vector<LevelState> &getStates();
+        LevelState &getState();
+
+    private:
+        int state_index;
+        std::vector<LevelState> states;
 };
 
-class WorldState {
+class LevelState {
     public:
-        WorldState();
-        WorldState(std::vector<Obstacle>);
+        LevelState();
+        LevelState(std::vector<Obstacle>);
+        std::vector<Obstacle> &getObstacles();
+    
+    private:
+        std::vector<Obstacle> obstacles;
 
 };
 
 class Obstacle {
-
+    public:
+        sf::IntRect rect;
 };
