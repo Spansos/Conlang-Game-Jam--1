@@ -2,32 +2,29 @@
 
 // headers
 #include <Vector>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics.hpp>
 
-class Level {
-    public:
-        Level();
-        Level(std::vector<LevelState>);
-        std::vector<LevelState> &getStates();
-        LevelState &getState();
 
-    private:
-        int state_index;
-        std::vector<LevelState> states;
+class Obstacle : public sf::Drawable {
+public:
+    Obstacle(sf::IntRect rect, int state, bool fixed=false);
+private:
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    static sf::RectangleShape drawshape;
+    sf::IntRect m_rect;
+    int m_state;
+    bool m_fixed;
+friend class Level;
 };
 
-class LevelState {
-    public:
-        LevelState();
-        LevelState(std::vector<Obstacle>);
-        std::vector<Obstacle> &getObstacles();
-    
-    private:
-        std::vector<Obstacle> obstacles;
 
-};
-
-class Obstacle {
-    public:
-        sf::IntRect rect;
+class Level : public sf::Drawable {
+public:
+    Level(std::vector<Obstacle> obstacles);
+    void setState(int state);
+    int getState();
+private:
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    int m_current_state;
+    std::vector<Obstacle> m_obstacles;
 };
