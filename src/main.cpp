@@ -17,13 +17,14 @@ int main() {
 				Obstacle(sf::FloatRect(12, 702, 402, 20), 0),
 				Obstacle(sf::FloatRect(15, 370, 40, 40), 0),
 				Obstacle(sf::FloatRect(0, 542, 320, 102), 0),
+				Obstacle(sf::FloatRect(600, 30, 32, 525), 0),
+				Obstacle(sf::FloatRect(264, 502, 482, 31), 0),
 				Obstacle(sf::FloatRect(0, 0, 100, 100), 1)
 			}
 		),
 		2
 	);
-	Player player;
-	player.m_rect = sf::FloatRect(40, 20, 20, 60);
+	Player player(sf::FloatRect(40, 20, 20, 60));
 
 	int framec = 0;
 	while (window.isOpen()) {
@@ -34,8 +35,7 @@ int main() {
 				break;
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::R)) {
-				player.m_rect.left = 40;
-				player.m_rect.top = 20;
+				player.setPos(sf::Vector2f(40, 20));
 			}
 		}
 		level.update();
