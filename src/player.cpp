@@ -38,7 +38,11 @@ void Player::update(const Level &level) {
     d_vel_y += 2;
     // update vel
     m_vel.y += d_vel_y;
-    m_vel.y *= .95;
+    if (m_contacts[0] or m_contacts[1]) {
+        m_vel.y *= .5;
+    } else {
+        m_vel.y *= .95;
+    }
 
     // update pos
     move_and_collide(level);
