@@ -87,6 +87,10 @@ void Player::move_and_collide(const Level &level) {
     }
 }
 
+void Player::collide(const Level &level) {
+    sf::FloatRect col_rect = level.collides(m_rect);
+}
+
 
 void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     static sf::RectangleShape drawshape;

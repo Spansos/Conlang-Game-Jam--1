@@ -12,6 +12,7 @@ public:
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
     void move_and_collide(const Level &level);
+    void collide(const Level &level);
     sf::FloatRect m_rect;
     sf::Vector2f m_vel;
     int m_jump_buffer_frames;
