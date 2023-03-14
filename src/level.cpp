@@ -1,4 +1,5 @@
 #include <level.hpp>
+#include <fstream>
 
 
 Obstacle::Obstacle(sf::FloatRect rect, int state, bool fixed) {
@@ -11,6 +12,15 @@ Level::Level(std::vector<Obstacle> obstacles, int statec) {
     m_obstacles = obstacles;
     m_statec = statec;
     m_current_state = 0;
+}
+
+void Level::load_from_file(std::string filename) {
+    std::ifstream file;
+    file.open(filename);
+    char line[128];
+    file.getline(line, 128);
+    
+    file.close();
 }
 
 const std::vector<Obstacle> & Level::getObstacles() const {
@@ -42,6 +52,7 @@ sf::FloatRect Level::collides(sf::FloatRect rect) const {
 void Obstacle::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     static sf::RectangleShape drawshape;
     drawshape.setFillColor(sf::Color::White);
+    // drawshape.setFillColor(sf::Color(32, 42, 64));
     drawshape.setPosition(m_rect.left, m_rect.top);
     drawshape.setSize(sf::Vector2f(m_rect.width, m_rect.height));
     target.draw(drawshape, states);

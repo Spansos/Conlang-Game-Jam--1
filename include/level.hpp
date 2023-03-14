@@ -20,7 +20,9 @@ friend class Level;
 
 class Level : public sf::Drawable {
 public:
+    Level() = default;
     Level(std::vector<Obstacle> obstacles, int statec);
+    void load_from_file(std::string filename);
     const std::vector<Obstacle> & getObstacles() const;
     void update();
     sf::FloatRect collides(sf::FloatRect rect) const;

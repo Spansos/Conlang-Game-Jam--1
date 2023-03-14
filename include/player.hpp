@@ -17,5 +17,6 @@ private:
     sf::Vector2f m_vel;
     int m_jump_buffer_frames;
     int m_coyote_time_frames;
+    bool m_is_jumping;
     bool m_contacts[4]; // keeps track of which directions are currently touching obstacles. order = left, right, top, bottom
 };
