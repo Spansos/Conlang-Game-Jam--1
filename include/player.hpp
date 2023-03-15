@@ -7,7 +7,7 @@
 class Player : public sf::Drawable {
 public:
     Player(sf::FloatRect rect);
-    void update(const Level &level);
+    void update(Level &level);
     void setPos(sf::Vector2f pos);
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

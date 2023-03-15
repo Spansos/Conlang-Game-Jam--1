@@ -13,7 +13,7 @@ Player::Player(sf::FloatRect rect) {
 }
 
 
-void Player::update(const Level &level) {
+void Player::update(Level &level) {
     // input
     float in_x = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) in_x++;
@@ -35,7 +35,7 @@ void Player::update(const Level &level) {
     if (m_contacts[3] || m_contacts[0] || m_contacts[1]) {
         m_coyote_time_frames = 4;
     }
-    // do jump
+    // do jump (and change level state)
     if (m_jump_buffer_frames && m_coyote_time_frames && !m_is_jumping) {
         m_jump_buffer_frames = 0;
         m_coyote_time_frames = 0;
@@ -45,6 +45,7 @@ void Player::update(const Level &level) {
             if (m_contacts[0]) m_vel.x += 16;
             if (m_contacts[1]) m_vel.x -= 16;
         }
+        level.nextstate();
     }
     if (m_jump_buffer_frames > 0) m_jump_buffer_frames--;
     if (m_coyote_time_frames > 0) m_coyote_time_frames--;

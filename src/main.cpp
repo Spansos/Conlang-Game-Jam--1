@@ -11,8 +11,19 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight), "Maliante", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(30);
 
-	Level level;
-	level.load_from_file("resources/levels/1.txt");
+
+	Level level{
+		std::vector<Obstacle>{{
+			Obstacle{{20, 400, 400, 20}, 0},
+			Obstacle{{570, 150, 20, 320}, 0},
+			Obstacle{{420, 390, 150, 20}, 0},
+			Obstacle{{0, 480, 600, 20}, 1},
+			Obstacle{{570, 50, 20, 180}, 1},
+			Obstacle{{0, 0, 100, 100}, 0, 1}
+		}},
+		2
+	};
+	// level.load_from_file("resources/levels/1.txt");
 	Player player(sf::FloatRect(40, 20, 24, 48));
 
 	int framec = 0;
@@ -27,7 +38,6 @@ int main() {
 				player.setPos(sf::Vector2f(40, 20));
 			}
 		}
-		level.update();
 		player.update(level);
 
 		window.clear(sf::Color(32, 42, 64));
