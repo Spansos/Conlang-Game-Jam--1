@@ -21,6 +21,10 @@ int main() {
 			Obstacle{{570, 50, 20, 180}, 1},
 			Obstacle{{0, 0, 100, 100}, 0, 1}
 		}},
+		std::vector<sf::FloatRect>{{
+			{200, 100, 70, 90},
+			{500, 300, 25, 40}
+		}},
 		2
 	};
 	// level.load_from_file("resources/levels/1.txt");
@@ -35,7 +39,7 @@ int main() {
 				break;
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::R)) {
-				player.setPos(sf::Vector2f(40, 20));
+				level.reset_player(player);
 			}
 		}
 		player.update(level);

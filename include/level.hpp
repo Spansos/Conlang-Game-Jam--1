@@ -4,17 +4,17 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+class Player;
 
 class Obstacle : public sf::Drawable {
 public:
-    Obstacle(sf::FloatRect rect, int state, int hazard=0, bool fixed=false);
-    void update();
+    Obstacle(sf::FloatRect rect, int state, bool hazard=false, bool fixed=false);
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const;
     sf::FloatRect m_rect;
     int m_state;
     bool m_fixed;
-    int m_hazard; // 0 is no hazard, 1 through 4 are left, right, up and down facing spikes
+    bool m_hazard;
 friend class Level;
 };
 
@@ -22,14 +22,19 @@ friend class Level;
 class Level : public sf::Drawable {
 public:
     Level() = default;
-    Level(std::vector<Obstacle> obstacles, int statec);
+    Level(std::vector<Obstacle> obstacles, std::vector<sf::FloatRect> checkpoints, int statec);
     void load_from_file(std::string filename);
     const std::vector<Obstacle> & getObstacles() const;
     void nextstate();
     sf::FloatRect collides(sf::FloatRect rect) const;
+    void update_checkpoint(const Player &player);
+    void reset_player(Player &player);
+    void reset_level(Player &player);
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    int m_cur_checkpoint;
     int m_current_state;
     int m_statec;
+    std::vector<sf::FloatRect> m_checkpoints;
     std::vector<Obstacle> m_obstacles;
 };

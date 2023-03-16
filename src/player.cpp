@@ -1,4 +1,5 @@
 #include <player.hpp>
+#include <level.hpp>
 #include <iostream>
 #include <cstring>
 
@@ -6,12 +7,11 @@ Player::Player(sf::FloatRect rect) {
     m_rect = rect;
 
     m_vel = sf::Vector2f(0, 0);
-    m_coyote_time_frames = 0;
     m_jump_buffer_frames = 0;
     m_is_jumping = false;
+    std::memset(m_coyote_times_frames, 0, sizeof(int) * 4);
     std::memset(m_contacts, 0, sizeof(bool) * 4);
 }
-
 
 void Player::update(Level &level) {
     // input
@@ -32,23 +32,24 @@ void Player::update(Level &level) {
         m_is_jumping = false;
     }
     // set coyote time
-    if (m_contacts[3] || m_contacts[0] || m_contacts[1]) {
-        m_coyote_time_frames = 4;
+    for (int i=0; i<4; i++) {
+        if (m_contacts[i]) {
+            m_coyote_times_frames[i] = 4;
+        }
     }
     // do jump (and change level state)
-    if (m_jump_buffer_frames && m_coyote_time_frames && !m_is_jumping) {
+    if (m_jump_buffer_frames && m_coyote_times_frames[3] && !m_is_jumping) {
         m_jump_buffer_frames = 0;
-        m_coyote_time_frames = 0;
+        m_coyote_times_frames[3] = 0;
         m_vel.y -= 28;
         m_is_jumping = true;
+        level.nextstate();
         if (!m_contacts[3]) {
             if (m_contacts[0]) m_vel.x += 16;
             if (m_contacts[1]) m_vel.x -= 16;
         }
-        level.nextstate();
-    }
     if (m_jump_buffer_frames > 0) m_jump_buffer_frames--;
-    if (m_coyote_time_frames > 0) m_coyote_time_frames--;
+    if (m_coyote_times_frames[3] > 0) m_coyote_times_frames[3]--;
     // gravity
     if (m_is_jumping) {
         m_vel.y += 1;
@@ -64,6 +65,8 @@ void Player::update(Level &level) {
 
     // update pos
     move_and_collide(level);
+    // update checkpoint
+    level.update_checkpoint(*this);
 }
 
 
@@ -72,6 +75,13 @@ void Player::setPos(sf::Vector2f pos) {
     m_rect.top = pos.y;
 }
 
+void Player::setVel(sf::Vector2f vel) {
+    m_vel = vel;
+}
+
+sf::FloatRect Player::getRect() const {
+    return m_rect;
+}
 
 void Player::move_and_collide(const Level &level) {
     collide(level);
