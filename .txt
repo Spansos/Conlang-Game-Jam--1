@@ -1,3 +1,4 @@
+wiktionary entry for transition:
 The process of change from one form, state, style or place to another. 
 A word or phrase connecting one part of a discourse to another.
 (music) A brief modulation; a passage connecting two themes.
@@ -15,7 +16,7 @@ from latin transitio. from trans + itio, across/beyond + go/proceed + noun-makin
 crafting:
     game jam (making jam from games)
     -bad pun
-    just generic factorio or x-creator simulator game
+    just generic factorio or someting-maker simulator game
 
     -maybe too hard to have it be fun
     -crafting is too broad a subject
@@ -25,7 +26,8 @@ death:
     platformer, when dead become ghost and world state changes for puzzles and challenge
     -both including death and world change is double, but death alone is too little
 
-    -don't personally connect death with transition
+    -don't personally associate death with transition
+    -might need cw, which limits reach
 
 segway:
     gmae about talking, requires you to segway between topics to progress
@@ -50,4 +52,4 @@ game name:
     ma (li?) ante, toki pona for changing location
     -above comment, but more
     maliante/maante, above ideas written as one word
-    -sounds good + has meaning but obfuscated
+    -sounds good + has meaning but (slightly) obfuscated

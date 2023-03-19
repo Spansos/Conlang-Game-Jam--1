@@ -1,5 +1,6 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <string>
 #include <level.hpp>
 #include <player.hpp>
 
@@ -9,28 +10,15 @@ int main() {
 	const int gameWidth = 800;
 	const int gameHeight = 600;
 	sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight), "Maliante", sf::Style::Titlebar | sf::Style::Close);
-	window.setFramerateLimit(30);
+	window.setFramerateLimit(60);
 
 
-	Level level{
-		std::vector<Obstacle>{{
-			Obstacle{{20, 400, 400, 20}, 0},
-			Obstacle{{570, 150, 20, 320}, 0},
-			Obstacle{{420, 390, 150, 20}, 0},
-			Obstacle{{0, 480, 600, 20}, 1},
-			Obstacle{{570, 50, 20, 180}, 1},
-			Obstacle{{0, 0, 100, 100}, 0, 1}
-		}},
-		std::vector<sf::FloatRect>{{
-			{200, 100, 70, 90},
-			{500, 300, 25, 40}
-		}},
-		2
-	};
-	// level.load_from_file("resources/levels/1.txt");
-	Player player(sf::FloatRect(40, 20, 24, 48));
+	Level level;
+	Player player(sf::FloatRect(0, 0, 24, 48));
 
-	int framec = 0;
+	int level_n = 0;
+	bool skip = false;
+
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -41,16 +29,29 @@ int main() {
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::R)) {
 				level.reset_player(player);
 			}
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::P)) {
+				skip = true;
+			}
 		}
+		if (player.getRect().top > 600) {
+			level.reset_player(player);
+		}
+		if (level.is_finished() || skip) {
+			skip = false;
+			level_n++;
+			std::string path = "resources/levels/" + std::to_string(level_n) + ".txt";
+			level.load_from_file(path);
+			level.reset_level(player);
+		}
+
 		player.update(level);
 
+		window.setView(sf::View({player.getRect().left+12-400, 0, 800, 600}));
+
 		window.clear(sf::Color(32, 42, 64));
-		// window.clear(sf::Color::White);
 		window.draw(level);
 		window.draw(player);
 		window.display();
-
-		framec++;
 	}
 
 	return EXIT_SUCCESS;

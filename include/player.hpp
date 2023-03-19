@@ -10,6 +10,7 @@ public:
     void update(Level &level);
     void setPos(sf::Vector2f pos);
     void setVel(sf::Vector2f vel);
+    void reset_all();
     sf::FloatRect getRect() const;
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

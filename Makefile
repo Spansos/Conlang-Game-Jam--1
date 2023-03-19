@@ -1,4 +1,4 @@
-CC=g++
+CC=C:\Users\PC\Documents\mingw32\bin\g++
 CFLAGS=-g -Wall
 SRCFILES = $(wildcard src/*.cpp)
 OBJFILES = $(patsubst src/%.cpp,obj/%.o,$(SRCFILES))

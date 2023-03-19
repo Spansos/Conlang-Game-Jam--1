@@ -10,6 +10,22 @@ Obstacle::Obstacle(sf::FloatRect rect, int state, bool hazard, bool fixed) {
     m_hazard = hazard;
 }
 
+sf::FloatRect Obstacle::getRect() {
+    return m_rect;
+}
+
+bool Obstacle::is_hazard() {
+    return m_hazard;
+}
+
+Level::Level() {
+    m_obstacles = std::vector<Obstacle>{};
+    m_statec = 0;
+    m_current_state = 0;
+    m_checkpoints = std::vector<sf::FloatRect>{};
+    m_cur_checkpoint = 0;
+}
+
 Level::Level(std::vector<Obstacle> obstacles, std::vector<sf::FloatRect> checkpoints, int statec) {
     m_obstacles = obstacles;
     m_statec = statec;
@@ -21,13 +37,30 @@ Level::Level(std::vector<Obstacle> obstacles, std::vector<sf::FloatRect> checkpo
 void Level::load_from_file(std::string filename) {
     std::ifstream file;
     file.open(filename);
-    char line[128];
-    int vals[12];
-    while (!file.eof()) {
-        file.getline(line, 128);
-        std::cout << line << std::endl;
+    if (!file) {
+        return;
     }
-    
+
+    file >> m_statec;
+
+    m_obstacles.clear();
+    float x, y, width, height;
+    int state, hazard, fixed;
+    do {
+        file >> x >> y >> width >> height >> state >> hazard >> fixed;
+        m_obstacles.push_back(
+            Obstacle({x, y, width, height}, state, hazard, fixed)
+        );
+    } while (file.peek() != '\n');
+
+    m_checkpoints.clear();
+    do {
+        file >> x >> y >> width >> height;
+        m_checkpoints.push_back(
+            sf::FloatRect(x, y, width, height)
+        );
+    } while (file.peek() != '\n' && file.peek() != EOF);
+
     file.close();
 }
 
@@ -39,14 +72,14 @@ void Level::nextstate() {
     m_current_state = (m_current_state+1)%m_statec;
 }
 
-sf::FloatRect Level::collides(sf::FloatRect rect) const {
+Obstacle Level::collides(sf::FloatRect rect) const {
     for (const auto & obstacle : m_obstacles) {
         if ((obstacle.m_state == m_current_state || obstacle.m_fixed)
             && rect.intersects(obstacle.m_rect)) {
-            return obstacle.m_rect;
+            return obstacle;
         }
     }
-    return sf::FloatRect(0, 0, 0, 0);
+    return Obstacle(sf::FloatRect(0, 0, 0, 0), 0);
 }
 
 void Level::update_checkpoint(const Player &player) {
@@ -58,14 +91,21 @@ void Level::update_checkpoint(const Player &player) {
     }
 }
 
-void Level::reset_player(Player &player) {
+void Level::reset_player(Player &player) const {
     sf::FloatRect checkpoint = m_checkpoints[m_cur_checkpoint];
     sf::Vector2f spawn_pos = {checkpoint.left+checkpoint.width/2, checkpoint.top+checkpoint.height/2};
     player.setPos({spawn_pos.x-player.getRect().width/2, spawn_pos.y-player.getRect().height/2});
+    player.reset_all();
 }
 
 void Level::reset_level(Player &player) {
+    m_cur_checkpoint = 0;
+    m_current_state = 0;
+    reset_player(player);
+}
 
+bool Level::is_finished() {
+    return (m_cur_checkpoint == (m_checkpoints.size() - 1) || m_checkpoints.size() == 0);
 }
 
 void draw_rect(const sf::FloatRect rect, sf::Color color, sf::RenderTarget &target, sf::RenderStates states) {

@@ -6,6 +6,10 @@
 Player::Player(sf::FloatRect rect) {
     m_rect = rect;
 
+    reset_all();
+}
+
+void Player::reset_all() {
     m_vel = sf::Vector2f(0, 0);
     m_jump_buffer_frames = 0;
     m_is_jumping = false;
@@ -19,14 +23,14 @@ void Player::update(Level &level) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) in_x++;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) in_x--;
     // better walk on ground
-    in_x *= (m_contacts[3] + 1) * 2;
+    in_x *= (m_contacts[3] + .7) * 1.6;
     m_vel.x += in_x;
     // friction
-    if (m_contacts[3]) m_vel.x *= .8; else m_vel.x *= .9;
+    if (m_contacts[3]) m_vel.x *= .79; else m_vel.x *= .9;
 
     // jump input
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        m_jump_buffer_frames = 1;
+        m_jump_buffer_frames = 4;
     }
     else {
         m_is_jumping = false;
@@ -34,33 +38,36 @@ void Player::update(Level &level) {
     // set coyote time
     for (int i=0; i<4; i++) {
         if (m_contacts[i]) {
-            m_coyote_times_frames[i] = 4;
+            m_coyote_times_frames[i] = (i < 2) ? 12 : 4;
         }
     }
     // do jump (and change level state)
-    if (m_jump_buffer_frames && m_coyote_times_frames[3] && !m_is_jumping) {
-        m_jump_buffer_frames = 0;
-        m_coyote_times_frames[3] = 0;
-        m_vel.y -= 28;
-        m_is_jumping = true;
-        level.nextstate();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_jump_buffer_frames && (m_coyote_times_frames[0] || m_coyote_times_frames[1] || m_coyote_times_frames[3]) && !m_is_jumping) {
+        m_vel.y -= 16;
         if (!m_contacts[3]) {
-            if (m_contacts[0]) m_vel.x += 16;
-            if (m_contacts[1]) m_vel.x -= 16;
+            if (m_coyote_times_frames[0]) m_vel.x += 12;
+            if (m_coyote_times_frames[1]) m_vel.x -= 12;
         }
+        m_is_jumping = true;
+        std::memset(m_coyote_times_frames, 0, sizeof(int) * 4);
+        m_jump_buffer_frames = 0;
+        level.nextstate();
+    }
     if (m_jump_buffer_frames > 0) m_jump_buffer_frames--;
-    if (m_coyote_times_frames[3] > 0) m_coyote_times_frames[3]--;
+    for (int i=0; i<4; i++) {
+        if (m_coyote_times_frames[i] > 0) m_coyote_times_frames[i]--;
+    }
     // gravity
     if (m_is_jumping) {
-        m_vel.y += 1;
+        m_vel.y += .35;
     } else {
-        m_vel.y += 2;
+        m_vel.y += .7;
     }
     // friction
     if ((m_contacts[0] || m_contacts[1]) && !m_is_jumping) {
-        m_vel.y *= .6;
+        m_vel.y *= .7;
     } else {
-        m_vel.y *= .95;
+        m_vel.y *= .96;
     }
 
     // update pos
@@ -88,36 +95,47 @@ void Player::move_and_collide(const Level &level) {
     std::memset(m_contacts, 0, sizeof(bool) * 4);
 
     m_rect.left += m_vel.x;
-    sf::FloatRect col_with = level.collides(m_rect);
-    if (col_with.height) {
+    Obstacle col_obs = level.collides(m_rect);
+    sf::FloatRect col_rect = col_obs.getRect();
+    if (col_obs.is_hazard()) {
+        level.reset_player(*this);
+        return;
+    }
+    if (col_rect.height) {
         if (m_vel.x < 0) {
             m_contacts[0] = true;
-            m_rect.left = col_with.left+col_with.width;
+            m_rect.left = col_rect.left+col_rect.width;
             m_vel.x = 0;
         } else {
             m_contacts[1] = true;
-            m_rect.left = col_with.left - m_rect.width;
+            m_rect.left = col_rect.left - m_rect.width;
             m_vel.x = 0;
         }
     }
 
     m_rect.top += m_vel.y;
-    col_with = level.collides(m_rect);
-    if (col_with.height) {
+    col_obs = level.collides(m_rect);
+    col_rect = col_obs.getRect();
+    if (col_obs.is_hazard()) {
+        level.reset_player(*this);
+        return;
+    }
+    if (col_rect.height) {
         if (m_vel.y < 0) {
             m_contacts[2] = true;
-            m_rect.top = col_with.top+col_with.height;
+            m_rect.top = col_rect.top+col_rect.height;
             m_vel.y = 0;
         } else {
             m_contacts[3] = true;
-            m_rect.top = col_with.top - m_rect.height;
+            m_rect.top = col_rect.top - m_rect.height;
             m_vel.y = 0;
         }
     }
 }
 
 void Player::collide(const Level &level) {
-    sf::FloatRect col_rect = level.collides(m_rect);
+    Obstacle col_obs = level.collides(m_rect);
+    sf::FloatRect col_rect = col_obs.getRect();
     if (!col_rect.height) {
         return;
     }
